@@ -118,8 +118,8 @@ defmodule BitOps do
       iex> my_stream = BitOps.stream_ones(0b1010_1110)
       iex> my_stream |> is_function
       true
-      iex> my_stream |> Stream.map(&(&1 * 10)) |> Enum.to_list
-      [10, 20, 30, 50, 70]
+      iex> my_stream |> Enum.reverse
+      [7, 5, 3, 2, 1]
 
   """
   def stream_ones(bigint) when is_integer(bigint) and bigint >= 0 do

@@ -189,7 +189,7 @@ defmodule UintSet do
   end
 
   @doc """
-  Returns a set that is `uint_set1` without the members of `uint_set2`.
+  Returns a new set like `uint_set1` without the members of `uint_set2`.
 
   ## Examples
 
