@@ -3,6 +3,8 @@
 [`NaturalSet`](https://hexdocs.pm/natural_set/NaturalSet.html) is an alternative set type in Elixir,
 designed to hold sets of small, non-negative integers.
 
+The name is a reference to the mathematical set ℕ₀ = {0, 1, 2, 3, ...}.
+
 `NaturalSet` emulates the full `MapSet` interface,
 except for `MapSet.size` which is replaced by `NaturalSet.length`.
 Many of the `NaturalSet` doctests and unit tests were adapted from `MapSet`.
