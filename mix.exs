@@ -1,10 +1,10 @@
-defmodule UintSet.MixProject do
+defmodule NaturalSet.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :uint_set,
-      version: "0.1.3",
+      app: :natural_set,
+      version: "0.2.0",
       elixir: "~> 1.8",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -15,8 +15,8 @@ defmodule UintSet.MixProject do
       package: package(),
 
       # Docs
-      name: "UintSet",
-      source_url: "https://github.com/ramalho/uint_set"
+      name: "NaturalSet",
+      source_url: "https://github.com/standupdev/natural_set"
     ]
   end
 
@@ -40,7 +40,7 @@ defmodule UintSet.MixProject do
   defp package() do
     [
       licenses: ["BSD 2-Clause"],
-      links: %{"GitHub" => "https://github.com/ramalho/uint_set"}
+      links: %{"GitHub" => "https://github.com/standupdev/natural_set"}
     ]
   end
 end

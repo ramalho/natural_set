@@ -10,11 +10,11 @@ use Mix.Config
 
 # You can configure your application as:
 #
-#     config :uint_set, key: :value
+#     config :natural_set, key: :value
 #
 # and access this configuration in your application as:
 #
-#     Application.get_env(:uint_set, :key)
+#     Application.get_env(:natural_set, :key)
 #
 # You can also configure a third-party app:
 #
