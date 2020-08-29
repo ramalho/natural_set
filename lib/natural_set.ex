@@ -306,7 +306,7 @@ defmodule NaturalSet do
 
   """
   def stream(%NaturalSet{bits: bits}) do
-    stream_ones(bits)
+    bits |> stream_ones
   end
 
   @doc """
@@ -336,7 +336,7 @@ defmodule NaturalSet do
 
   """
   def to_list(%NaturalSet{bits: bits}) do
-    bits |> list_ones
+    bits |> stream_ones |> Enum.to_list
   end
 
   @doc """

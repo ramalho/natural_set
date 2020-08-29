@@ -133,14 +133,6 @@ defmodule BitOpsTest do
     {0b1_1111_1110, 1..8 |> Enum.to_list()}
   ]
 
-  test "list_ones" do
-    @ones_fixture
-    |> Enum.each(fn {bigint, wanted} ->
-      actual = list_ones(bigint)
-      assert actual == wanted, "{#{bigint}, #{inspect(wanted)}} -> #{inspect(actual)}"
-    end)
-  end
-
   test "stream_ones" do
     @ones_fixture
     |> Enum.each(fn {bigint, wanted} ->

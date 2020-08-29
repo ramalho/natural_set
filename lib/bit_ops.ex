@@ -43,6 +43,8 @@ defmodule BitOps do
       1
       iex> BitOps.get_bit(0b101, 1)
       0
+      iex> BitOps.get_bit(0b101, 2)
+      1
       iex> BitOps.get_bit(0b101, 99)
       0
   """
@@ -86,30 +88,6 @@ defmodule BitOps do
   end
 
   @doc """
-  Return a list of all indexes with bit value `1`.
-
-  ## Examples
-
-      iex> BitOps.list_ones(0)
-      []
-      iex> BitOps.list_ones(0b1011)
-      [0, 1, 3]
-  """
-  def list_ones(bigint) when is_integer(bigint) and bigint >= 0 do
-    list_ones(bigint, 0, [])
-  end
-
-  defp list_ones(0, _index, list), do: Enum.reverse(list)
-
-  defp list_ones(bigint, index, list) when (bigint &&& 1) == 1 do
-    list_ones(bigint >>> 1, index + 1, [index | list])
-  end
-
-  defp list_ones(bigint, index, list) do
-    list_ones(bigint >>> 1, index + 1, list)
-  end
-
-  @doc """
   Returns a stream function yielding the indexes with bit value `1`.
   The stream lazily traverses the bits of the integer as needed.
 
@@ -128,13 +106,14 @@ defmodule BitOps do
 
   defp next_one({0, _index}), do: nil
 
-  defp next_one({bigint, index}) when (bigint &&& 1) == 1 do
-    # Return {next_element, new_accumulator}
-    {index, {bigint >>> 1, index + 1}}
+  defp next_one({bigint, index}) when (bigint &&& 1) == 0 do
+    # LSB is 0: shift bigint; increment index; try again
+    next_one({bigint >>> 1, index + 1})
   end
 
   defp next_one({bigint, index}) do
-    # Shift bigint, increment index, try again
-    next_one({bigint >>> 1, index + 1})
+    # LSB is one: return {next_element, new_accumulator_tuple}
+    {index, {bigint >>> 1, index + 1}}
   end
+
 end
