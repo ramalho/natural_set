@@ -9,11 +9,13 @@ defmodule Fibonacci do
    iex> > Fibonacci.sequence(10) |> Enum.to_list
    [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
   """
-  def sequence(count), do: Stream.unfold({count, 0, 1}, &next/1)
 
-  defp next({0, _, _}), do: nil
-
-  defp next({count, a, b}), do: {a, {count - 1, b, a + b}}
+  def sequence(count) do
+    Stream.unfold({count, 0, 1}, fn
+      {0, _, _} -> nil
+      {count, a, b} -> {a, {count - 1, b, a + b}}
+    end)
+  end
 
   def main do
     case System.argv() do
