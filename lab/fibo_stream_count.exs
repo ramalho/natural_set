@@ -1,7 +1,6 @@
-#!/usr/bin/env elixir
+#! /usr/bin/env elixir
 
 defmodule Fibonacci do
-
   @doc ~S"""
   Generates `count` numbers from the Fibonacci sequence.
 
@@ -19,13 +18,13 @@ defmodule Fibonacci do
   def main do
     case System.argv() do
       [] -> 20
-      [arg|_] -> String.to_integer(arg)
+      [arg | _] -> String.to_integer(arg)
     end
-    |> sequence
+    |> sequence()
     |> Enum.map(&IO.write("#{&1} "))
+
     IO.puts("")
   end
-
 end
 
-Fibonacci.main
+Fibonacci.main()
