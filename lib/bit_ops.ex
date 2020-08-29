@@ -1,6 +1,6 @@
 defmodule BitOps do
   @moduledoc """
-  BitOps provides bit-level operations on integers.
+  BitOps provides operations on integers used as bit vectors.
   This is a low level utility module to support `NaturalSet`.
 
   All the functions take an integer as the first argument;

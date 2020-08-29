@@ -249,8 +249,9 @@ defmodule NaturalSet do
 
   @doc """
   Returns the number of elements in `natural_set`.
-  This function is named `length` because it needs to traverse the `natural_set`,
-  so it runs in O(n) time. The corresponding function in `MapSet` is `size`.
+  The corresponding function in `MapSet` is `size`.
+  This function is named `length` because it traverses the `natural_set`,
+  so it runs in O(n) time.
 
   ## Example
 
@@ -331,12 +332,12 @@ defmodule NaturalSet do
 
   ## Examples
 
-      iex> NaturalSet.to_list(NaturalSet.new([2, 3, 1]))
+      iex> NaturalSet.new([2, 3, 1]) |> NaturalSet.to_list
       [1, 2, 3]
 
   """
-  def to_list(%NaturalSet{bits: bits}) do
-    bits |> stream_ones |> Enum.to_list
+  def to_list(natural_set) do
+    natural_set |> stream |> Enum.to_list
   end
 
   @doc """
