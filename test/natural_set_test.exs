@@ -1,6 +1,5 @@
 defmodule NaturalSetTest do
-  # , async: true
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   doctest NaturalSet
 
   import NaturalSet

@@ -171,9 +171,7 @@ defmodule NaturalSet do
   end
 
   @doc """
-  Deletes `value` from `natural_set`.
-
-  Returns a new set which is a copy of `natural_set` but without `value`.
+  Returns a new set which is a copy of `natural_set` without `value`.
 
   ## Examples
 
