@@ -3,12 +3,13 @@ defmodule NaturalSet do
     Functions that work on sets of small integers >= 0.
 
     `NaturalSet` is an alternative set type in Elixir
-    emulating the `MapSet` interface as closely as possible.
+    emulating the `MapSet` interface as closely as possible,
+    with one important limitation: every element must be a non-negative integers.
+
     Many of the `NaturalSet` doctests and unit tests were adapted from `MapSet`.
     `NaturalSet` illustrates the construction of a functional data structure from scratch,
-    implementing the `Inspect`, `Enumerable`, and `Collectable` protocols.
+    with support for streaming and the `Inspect`, `Enumerable`, and `Collectable` protocols.
 
-    An `NaturalSet` can contain only non-negative integers.
     By definition, sets contain unique elements.
     Trying to insert a duplicate is a no-op:
 
@@ -147,7 +148,7 @@ defmodule NaturalSet do
       #NaturalSet<[1, 2, 3, 4]>
 
   """
-  def put(%NaturalSet{bits: bits}, element) do
+  def put(%NaturalSet{bits: bits}, element) when is_integer(element) and element >= 0 do
     %NaturalSet{bits: 1 <<< element ||| bits}
   end
 
@@ -162,7 +163,7 @@ defmodule NaturalSet do
       false
 
   """
-  def member?(%NaturalSet{bits: bits}, element) do
+  def member?(%NaturalSet{bits: bits}, element) when is_integer(element) and element >= 0 do
     (bits >>> element &&& 1) == 1
   end
 
@@ -178,7 +179,7 @@ defmodule NaturalSet do
       #NaturalSet<[1, 3]>
 
   """
-  def delete(natural_set, element) do
+  def delete(natural_set, element) when is_integer(element) and element >= 0 do
     if member?(natural_set, element) do
       new_bits = (1 <<< element) ^^^ natural_set.bits
     %NaturalSet{bits: new_bits}
