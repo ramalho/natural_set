@@ -91,8 +91,6 @@ defmodule NaturalSet do
 
   use Bitwise, only_operators: true
 
-  import BitOps
-
   defstruct bits: 0
 
   @doc """
@@ -139,7 +137,37 @@ defmodule NaturalSet do
   end
 
   @doc """
-  Returns a new set which is a copy of `natural_set` without `value`.
+  Inserts `element` into `natural_set` if `natural_set` doesn't already contain it.
+
+  ## Examples
+
+      iex> NaturalSet.put(NaturalSet.new([1, 2, 3]), 3)
+      #NaturalSet<[1, 2, 3]>
+      iex> NaturalSet.put(NaturalSet.new([1, 2, 3]), 4)
+      #NaturalSet<[1, 2, 3, 4]>
+
+  """
+  def put(%NaturalSet{bits: bits}, element) do
+    %NaturalSet{bits: 1 <<< element ||| bits}
+  end
+
+  @doc """
+  Checks if `natural_set` contains `element`.
+
+  ## Examples
+
+      iex> NaturalSet.member?(NaturalSet.new([1, 2, 3]), 2)
+      true
+      iex> NaturalSet.member?(NaturalSet.new([1, 2, 3]), 4)
+      false
+
+  """
+  def member?(%NaturalSet{bits: bits}, element) do
+    (bits >>> element &&& 1) == 1
+  end
+
+  @doc """
+  Returns a new set which is a copy of `natural_set` without `element`.
 
   ## Examples
 
@@ -150,36 +178,13 @@ defmodule NaturalSet do
       #NaturalSet<[1, 3]>
 
   """
-  def delete(%NaturalSet{bits: bits}, value) do
-    %NaturalSet{bits: unset_bit(bits, value)}
-  end
-
-  @doc """
-  Returns a new set like `natural_set1` without the members of `natural_set2`.
-
-  ## Examples
-
-      iex> NaturalSet.difference(NaturalSet.new([1, 2]), NaturalSet.new([2, 3, 4]))
-      #NaturalSet<[1]>
-
-  """
-  def difference(%NaturalSet{bits: bits1}, %NaturalSet{bits: bits2}) do
-    %NaturalSet{bits: bits1 &&& bits2 ^^^ bits1}
-  end
-
-  @doc """
-  Checks if `natural_set1` and `natural_set2` have no members in common.
-
-  ## Examples
-
-      iex> NaturalSet.disjoint?(NaturalSet.new([1, 2]), NaturalSet.new([3, 4]))
-      true
-      iex> NaturalSet.disjoint?(NaturalSet.new([1, 2]), NaturalSet.new([2, 3]))
-      false
-
-  """
-  def disjoint?(%NaturalSet{bits: bits1}, %NaturalSet{bits: bits2}) do
-    (bits1 &&& bits2) == 0
+  def delete(natural_set, element) do
+    if member?(natural_set, element) do
+      new_bits = (1 <<< element) ^^^ natural_set.bits
+    %NaturalSet{bits: new_bits}
+    else
+      natural_set  # return unchanged
+    end
   end
 
   @doc """
@@ -214,66 +219,29 @@ defmodule NaturalSet do
   end
 
   @doc """
-  Returns the number of elements in `natural_set`.
-  The corresponding function in `MapSet` is `size`.
-  This function is named `length` because it traverses the `natural_set`,
-  so it runs in O(n) time.
-
-  ## Example
-
-      iex> NaturalSet.length(NaturalSet.new([10, 20, 30]))
-      3
-
-  """
-  def length(%NaturalSet{bits: bits}) do
-    bits |> count_ones
-  end
-
-  @doc """
-  Checks if `natural_set` contains `value`.
+  Returns a set containing all members of `natural_set1` and `natural_set2`.
 
   ## Examples
 
-      iex> NaturalSet.member?(NaturalSet.new([1, 2, 3]), 2)
-      true
-      iex> NaturalSet.member?(NaturalSet.new([1, 2, 3]), 4)
-      false
-
-  """
-  def member?(%NaturalSet{bits: bits}, value) do
-    get_bit(bits, value) == 1
-  end
-
-  @doc """
-  Inserts `value` into `natural_set` if `natural_set` doesn't already contain it.
-
-  ## Examples
-
-      iex> NaturalSet.put(NaturalSet.new([1, 2, 3]), 3)
-      #NaturalSet<[1, 2, 3]>
-      iex> NaturalSet.put(NaturalSet.new([1, 2, 3]), 4)
+      iex> NaturalSet.union(NaturalSet.new([1, 2]), NaturalSet.new([2, 3, 4]))
       #NaturalSet<[1, 2, 3, 4]>
 
   """
-  def put(%NaturalSet{bits: bits}, value) do
-    %NaturalSet{bits: set_bit(bits, value)}
+  def union(%NaturalSet{bits: bits1}, %NaturalSet{bits: bits2}) do
+    %NaturalSet{bits: bits1 ||| bits2}
   end
 
   @doc """
-  Returns a stream function yielding the elements of `natural_set` one by one in ascending order.
-  The stream lazily traverses the bits of the `natural_set` as needed.
+  Returns a new set like `natural_set1` without the members of `natural_set2`.
 
   ## Examples
 
-      iex> my_stream = NaturalSet.new([10, 5, 7]) |> NaturalSet.stream
-      iex> my_stream |> is_function
-      true
-      iex> my_stream |> Stream.map(&(&1 * 10)) |> Enum.to_list
-      [50, 70, 100]
+      iex> NaturalSet.difference(NaturalSet.new([1, 2]), NaturalSet.new([2, 3, 4]))
+      #NaturalSet<[1]>
 
   """
-  def stream(%NaturalSet{bits: bits}) do
-    bits |> stream_ones
+  def difference(%NaturalSet{bits: bits1}, %NaturalSet{bits: bits2}) do
+    %NaturalSet{bits: bits1 &&& bits2 ^^^ bits1}
   end
 
   @doc """
@@ -294,6 +262,75 @@ defmodule NaturalSet do
   end
 
   @doc """
+  Checks if `natural_set1` and `natural_set2` have no members in common.
+
+  ## Examples
+
+      iex> NaturalSet.disjoint?(NaturalSet.new([1, 2]), NaturalSet.new([3, 4]))
+      true
+      iex> NaturalSet.disjoint?(NaturalSet.new([1, 2]), NaturalSet.new([2, 3]))
+      false
+
+  """
+  def disjoint?(natural_set1, natural_set2) do
+    intersection(natural_set1, natural_set2).bits == 0
+  end
+
+  @doc """
+  Returns the number of elements in `natural_set`.
+  The corresponding function in `MapSet` is `size`.
+  This function is named `length` because it traverses the `natural_set`,
+  so it runs in O(n) time.
+
+  ## Example
+
+      iex> NaturalSet.length(NaturalSet.new([10, 20, 30]))
+      3
+
+  """
+  def length(%NaturalSet{bits: bits}) do
+    count_ones(bits, 0)
+  end
+
+  defp count_ones(0, count), do: count
+
+  defp count_ones(bits, count) do
+    count = count + (bits &&& 1)
+    count_ones(bits >>> 1, count)
+  end
+
+
+  @doc """
+  Returns a stream function yielding the elements of `natural_set` one by one in ascending order.
+  The stream lazily traverses the bits of the `natural_set` as needed.
+
+  ## Examples
+
+      iex> my_stream = NaturalSet.new([10, 5, 7]) |> NaturalSet.stream
+      iex> my_stream |> is_function
+      true
+      iex> my_stream |> Stream.map(&(&1 * 10)) |> Enum.to_list
+      [50, 70, 100]
+
+  """
+  def stream(%NaturalSet{bits: bits}) do
+    Stream.unfold({bits, 0}, &next_one/1)
+  end
+
+  defp next_one({0, _index}), do: nil
+
+  defp next_one({bits, index}) when (bits &&& 1) == 0 do
+    # LSB is 0: shift bits; increment index; try again
+    next_one({bits >>> 1, index + 1})
+  end
+
+  defp next_one({bits, index}) do
+    # LSB is one: return {next_element, new_accumulator_tuple}
+    {index, {bits >>> 1, index + 1}}
+  end
+
+
+  @doc """
   Returns a list containing all members of `natural_set` in ascending order.
 
   ## Examples
@@ -304,19 +341,6 @@ defmodule NaturalSet do
   """
   def to_list(natural_set) do
     natural_set |> stream |> Enum.to_list
-  end
-
-  @doc """
-  Returns a set containing all members of `natural_set1` and `natural_set2`.
-
-  ## Examples
-
-      iex> NaturalSet.union(NaturalSet.new([1, 2]), NaturalSet.new([2, 3, 4]))
-      #NaturalSet<[1, 2, 3, 4]>
-
-  """
-  def union(%NaturalSet{bits: bits1}, %NaturalSet{bits: bits2}) do
-    %NaturalSet{bits: bits1 ||| bits2}
   end
 
   defimpl Enumerable do
