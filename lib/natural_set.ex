@@ -319,16 +319,15 @@ defmodule NaturalSet do
 
   defp next_one({0, _index}), do: nil
 
-  defp next_one({bits, index}) when (bits &&& 1) == 0 do
-    # LSB is 0: shift bits; increment index; try again
-    next_one({bits >>> 1, index + 1})
-  end
-
-  defp next_one({bits, index}) do
+  defp next_one({bits, index}) when (bits &&& 1) == 1 do
     # LSB is one: return {next_element, new_accumulator_tuple}
     {index, {bits >>> 1, index + 1}}
   end
 
+  defp next_one({bits, index}) do
+    # LSB is 0: shift bits; increment index; try again
+    next_one({bits >>> 1, index + 1})
+  end
 
   @doc """
   Returns a list containing all members of `natural_set` in ascending order.
