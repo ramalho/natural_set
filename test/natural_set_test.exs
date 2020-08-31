@@ -5,7 +5,7 @@ defmodule NaturalSetTest do
   import NaturalSet
 
   test "new/1" do
-    assert NaturalSet.new(bits: 0b1110) == NaturalSet.new([1, 2, 3])
+    assert %NaturalSet{bits: 0b1110} == NaturalSet.new([1, 2, 3])
   end
 
   test "new/2" do
@@ -19,12 +19,12 @@ defmodule NaturalSetTest do
   end
 
   test "to_list/1 -> [0]" do
-    result = NaturalSet.new(bits: 1) |> to_list()
+    result = %NaturalSet{bits: 1} |> to_list()
     assert result == [0]
   end
 
   test "to_list/1 -> [0, 1, 2, 3]" do
-    result = NaturalSet.new(bits: 0b1111) |> to_list()
+    result = %NaturalSet{bits: 0b1111} |> to_list()
     assert result == [0, 1, 2, 3]
   end
 
@@ -32,7 +32,7 @@ defmodule NaturalSetTest do
     bigint = round(:math.pow(2, 100)) + 2
 
     result =
-      NaturalSet.new(bits: bigint)
+      %NaturalSet{bits: bigint}
       |> to_list()
 
     assert result == [1, 100]
@@ -43,7 +43,7 @@ defmodule NaturalSetTest do
       {NaturalSet.new(), 0, [0]},
       {NaturalSet.new(), 1, [1]},
       {NaturalSet.new(), 1000, [1000]},
-      {NaturalSet.new(bits: 0xF0), 9, [4, 5, 6, 7, 9]}
+      {%NaturalSet{bits: 0xF0}, 9, [4, 5, 6, 7, 9]}
     ]
     |> Enum.each(fn {initial, element, wanted} ->
       result = initial |> put(element) |> to_list

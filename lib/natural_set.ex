@@ -68,17 +68,6 @@ defmodule NaturalSet do
         iex> set_with_zero_and_one.bits
         3
 
-    The `NaturalSet.new/1` function also accepts a keyword argument
-    setting the initial value of the `bits` field:
-
-        iex> NaturalSet.new(bits: 13)
-        #NaturalSet<[0, 2, 3]>
-
-    This is easier to understand using base 2 notation for the argument:
-
-        iex> NaturalSet.new(bits: 0b1101)
-        #NaturalSet<[0, 2, 3]>
-
     `NaturalSet`s can also be constructed starting from other collection-type data
     structures: for example, see `NaturalSet.new/1` or `Enum.into/2`.
 
@@ -116,27 +105,6 @@ defmodule NaturalSet do
 
   """
   def new, do: %NaturalSet{}
-
-  @doc """
-  Returns a new `NaturalSet` reading the given integer as a bit pattern.
-
-  ## Examples
-
-      iex> NaturalSet.new(bits: 0)
-      #NaturalSet<[]>
-      iex> NaturalSet.new(bits: 1)
-      #NaturalSet<[0]>
-      iex> NaturalSet.new(bits: 2)
-      #NaturalSet<[1]>
-      iex> NaturalSet.new(bits: 3)
-      #NaturalSet<[0, 1]>
-      iex> NaturalSet.new(bits: 0b111010)
-      #NaturalSet<[1, 3, 4, 5]>
-
-  """
-  def new(bits: bigint) when is_integer(bigint) and bigint >= 0 do
-    %NaturalSet{bits: bigint}
-  end
 
   @doc """
   Creates a set from an enumerable.
