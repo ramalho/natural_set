@@ -55,7 +55,7 @@ defmodule NaturalSetTest do
 
   test "member/1" do
     refute NaturalSet.new() |> NaturalSet.member?(0)
-    assert [0] |>NaturalSet.new() |> NaturalSet.member?(0)
+    assert [0] |> NaturalSet.new() |> NaturalSet.member?(0)
     assert [1, 1000] |> NaturalSet.new() |> NaturalSet.member?(1000)
     refute [1, 1000] |> NaturalSet.new() |> NaturalSet.member?(0)
   end

@@ -182,9 +182,10 @@ defmodule NaturalSet do
   def delete(natural_set, element) when is_integer(element) and element >= 0 do
     if member?(natural_set, element) do
       new_bits = (1 <<< element) ^^^ natural_set.bits
-    %NaturalSet{bits: new_bits}
+      %NaturalSet{bits: new_bits}
     else
-      natural_set  # return unchanged
+      # return unchanged
+      natural_set
     end
   end
 
@@ -300,7 +301,6 @@ defmodule NaturalSet do
     count_ones(bits >>> 1, count)
   end
 
-
   @doc """
   Returns a stream function yielding the elements of `natural_set` one by one in ascending order.
   The stream lazily traverses the bits of the `natural_set` as needed.
@@ -340,7 +340,7 @@ defmodule NaturalSet do
 
   """
   def to_list(natural_set) do
-    natural_set |> stream |> Enum.to_list
+    natural_set |> stream |> Enum.to_list()
   end
 
   defimpl Enumerable do
