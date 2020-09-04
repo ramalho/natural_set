@@ -119,7 +119,7 @@ defmodule NaturalSet do
 
   """
   def new(enumerable) do
-    Enum.into(enumerable, NaturalSet.new())
+    enumerable |> Enum.into(NaturalSet.new())
   end
 
   @doc """
@@ -132,9 +132,7 @@ defmodule NaturalSet do
 
   """
   def new(enumerable, transform) when is_function(transform, 1) do
-    enumerable
-    |> Stream.map(transform)
-    |> new
+    enumerable |> Stream.map(transform) |> new
   end
 
   @doc """
