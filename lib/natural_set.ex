@@ -119,7 +119,7 @@ defmodule NaturalSet do
 
   """
   def new(enumerable) do
-    Enum.reduce(enumerable, %NaturalSet{}, &NaturalSet.put(&2, &1))
+    Enum.into(enumerable, NaturalSet.new())
   end
 
   @doc """
